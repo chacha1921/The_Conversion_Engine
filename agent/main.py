@@ -1,8 +1,9 @@
 """
 FastAPI application — entry point for the Conversion Engine.
-Routes: email reply webhook, SMS inbound webhook, health check.
+Routes: email reply webhook, SMS inbound webhook, Cal.com booking webhook, health check.
 """
 from __future__ import annotations
+import logging
 import os
 import uuid
 from datetime import datetime, timezone
@@ -14,10 +15,12 @@ from pydantic import BaseModel
 from .enrichment.pipeline import run as enrich
 from .icp_classifier import classify
 from .thread_store import store
-from .email_handler import send as send_email, EmailMessage, handle_reply_webhook
+from .email_handler import send as send_email, EmailMessage, handle_reply_webhook, register_handler
 from .sms_handler import handle_inbound, send as send_sms, build_scheduling_sms
 from .hubspot_mcp import upsert_contact, log_note, update_lead_status
-from .cal_booking import get_booking_link
+from .cal_booking import get_booking_link, handle_booking_webhook
+
+logger = logging.getLogger(__name__)
 
 app = FastAPI(title="The Conversion Engine", version="0.1.0")
 
@@ -76,6 +79,18 @@ async def email_webhook(request: Request):
 
 
 # ── SMS inbound webhook ─────────────────────────────────────────────────
+@app.post("/webhooks/cal")
+async def cal_webhook(request: Request):
+    payload = await request.json()
+    try:
+        event = handle_booking_webhook(payload)
+        return JSONResponse({"status": "ok", "event": event})
+    except ValueError as e:
+        logger.error("Cal.com webhook parse error: %s", e)
+        raise HTTPException(status_code=422, detail=str(e))
+
+
+# ── SMS inbound webhook ─────────────────────────────────────────────────
 @app.post("/webhooks/sms")
 async def sms_webhook(request: Request):
     payload = await request.json()
@@ -104,13 +119,25 @@ async def sms_webhook(request: Request):
         send_sms(to=from_phone, message=event["reply"])
         thread.add(role="agent", content=event["reply"], channel="sms")
     else:
-        cal_link = get_booking_link()
-        reply = build_scheduling_sms(
-            prospect_name="there",
-            cal_link=cal_link,
-        )
-        send_sms(to=from_phone, message=reply)
-        thread.add(role="agent", content=reply, channel="sms")
+        # Channel hierarchy: SMS is secondary — only send scheduling link if there
+        # is an existing email exchange in this thread (warm lead gate).
+        has_prior_email = any(m.channel == "email" for m in thread.messages)
+        if not has_prior_email:
+            logger.info(
+                "SMS from %s — no prior email exchange; suppressing scheduling link",
+                from_phone,
+            )
+            ack = "Thanks for reaching out! We'll follow up by email shortly."
+            send_sms(to=from_phone, message=ack)
+            thread.add(role="agent", content=ack, channel="sms")
+        else:
+            cal_link = get_booking_link()
+            reply = build_scheduling_sms(
+                prospect_name="there",
+                cal_link=cal_link,
+            )
+            send_sms(to=from_phone, message=reply)
+            thread.add(role="agent", content=reply, channel="sms")
 
     store.save()
     return JSONResponse({"status": "ok"})
