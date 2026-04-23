@@ -82,7 +82,10 @@ def run(
         ai_maturity_score=ai_score_val,
         ai_maturity_confidence=ai_confidence,
         ai_maturity_signals=ai_signals,
-        per_signal_confidence={s.signal: (1.0 if s.present else 0.0) for s in ai_signals},
+        per_signal_confidence={
+            s.signal: ({"high": 1.0, "medium": 0.67, "low": 0.33}.get(s.weight, 0.33) if s.present else 0.0)
+            for s in ai_signals
+        },
     )
     _write_json(hiring_brief.model_dump_json(indent=2), output_dir, "hiring_signal_brief.json")
 
