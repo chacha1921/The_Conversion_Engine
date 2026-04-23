@@ -1,0 +1,52 @@
+services:
+  - type: web
+    name: conversion-engine
+    runtime: python
+    region: oregon
+    plan: free
+    buildCommand: pip install -r requirements.txt && playwright install chromium --with-deps
+    startCommand: uvicorn agent.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.12"
+      # ── LLM ──────────────────────────────────────────────────────────
+      - key: OPENROUTER_API_KEY
+        sync: false
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      # ── Email ─────────────────────────────────────────────────────────
+      - key: RESEND_API_KEY
+        sync: false
+      - key: EMAIL_FROM
+        value: "outreach@tenacious.io"
+      - key: STAFF_SINK_EMAIL
+        sync: false
+      # ── SMS ───────────────────────────────────────────────────────────
+      - key: AT_USERNAME
+        value: "sandbox"
+      - key: AT_API_KEY
+        sync: false
+      - key: AT_SHORTCODE
+        sync: false
+      - key: STAFF_SINK_PHONE
+        sync: false
+      # ── HubSpot ───────────────────────────────────────────────────────
+      - key: HUBSPOT_ACCESS_TOKEN
+        sync: false
+      # ── Cal.com ───────────────────────────────────────────────────────
+      - key: CALCOM_BASE_URL
+        sync: false
+      - key: CALCOM_API_KEY
+        sync: false
+      - key: CALCOM_EVENT_TYPE_ID
+        value: "1"
+      - key: SDR_EMAIL
+        sync: false
+      # ── Langfuse ──────────────────────────────────────────────────────
+      - key: LANGFUSE_PUBLIC_KEY
+        sync: false
+      - key: LANGFUSE_SECRET_KEY
+        sync: false
+      # ── Kill-switch: leave UNSET on Render unless staff approves live ──
+      # - key: OUTBOUND_LIVE
+      #   value: "true"
