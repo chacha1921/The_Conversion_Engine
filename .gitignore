@@ -1,0 +1,69 @@
+# ── Virtual environment ──────────────────────────────────────────────
+.venv/
+venv/
+env/
+__pypackages__/
+
+# ── Python ───────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# ── Environment / secrets ────────────────────────────────────────────
+.env
+.env.local
+.env.*.local
+# Keep the example file
+!.env.example
+
+# ── Seed materials (Tenacious proprietary — must not leave the repo) ─
+# Per data-handling policy: delete from personal infra at end of week.
+seed/sales_deck.pdf
+seed/case_studies/
+seed/email_sequences/
+seed/discovery_transcripts/
+seed/pricing_sheet.md
+seed/bench_summary.json
+seed/style_guide.md
+# icp_definition.md is retained as it drives grading
+!seed/icp_definition.md
+
+# ── Trace / evaluation outputs (can be large) ────────────────────────
+eval/trace_log.jsonl
+method/held_out_traces.jsonl
+
+# ── OS / editor ──────────────────────────────────────────────────────
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+.vscode/settings.json
+.idea/
+
+# ── Jupyter ──────────────────────────────────────────────────────────
+.ipynb_checkpoints/
+*.ipynb
+
+# ── Logs & temp ──────────────────────────────────────────────────────
+*.log
+*.tmp
+*.bak
+/tmp/
+
+# ── Playwright ───────────────────────────────────────────────────────
+playwright-report/
+test-results/
+
+# ── Docker ───────────────────────────────────────────────────────────
+.dockerignore
+
+/docs
