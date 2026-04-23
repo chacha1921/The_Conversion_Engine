@@ -25,6 +25,7 @@ build/
 
 # ── Seed materials (Tenacious proprietary — must not leave the repo) ─
 # Per data-handling policy: delete from personal infra at end of week.
+tenacious_sales_data/
 seed/sales_deck.pdf
 seed/case_studies/
 seed/email_sequences/
@@ -67,3 +68,5 @@ test-results/
 .dockerignore
 
 /docs
+Chalie_TRP1_Week_10_Delivery.md
+Chalie_TRP1_Week_10_Delivery.pdf
