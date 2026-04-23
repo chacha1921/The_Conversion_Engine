@@ -377,6 +377,29 @@ This calculation must appear in `evidence_graph.json` with derivation traceable 
 
 ### 10. Deployment & Safety Layer
 
+#### Webhook Backend — Render Free Tier
+
+The FastAPI server must be publicly reachable so all four integrations can POST events to it.
+Use **Render** (free tier, no credit card) — `render.yaml` is pre-configured in the repo root.
+
+```
+Stable public URL: https://conversion-engine.onrender.com
+                           │
+        ┌──────────────────┼──────────────────┬─────────────────────┐
+        ▼                  ▼                  ▼                     ▼
+/webhooks/email    /webhooks/sms      /webhooks/cal         (HubSpot writes
+(Resend reply      (Africa's Talking  (Cal.com booking       are outbound —
+ webhook)           inbound)           confirmed)            no inbound hook)
+```
+
+Register the Render URL once in each provider dashboard:
+- **Resend** → Dashboard → Webhooks → `https://<url>/webhooks/email`
+- **Africa's Talking** → SMS → Callback URL → `https://<url>/webhooks/sms`
+- **Cal.com** → Admin → Webhooks → `https://<url>/webhooks/cal`
+
+`OUTBOUND_LIVE` is deliberately absent from `render.yaml` — all outbound defaults to the
+staff sink on Render exactly as it does locally.
+
 #### Kill-Switch
 Every code path that sends real outbound must check:
 ```python
