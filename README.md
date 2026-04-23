@@ -28,6 +28,7 @@ Data Sources (Crunchbase ODM, layoffs.fyi, Public Job Posts)
 
 | Layer | Tool | Status |
 |-------|------|--------|
+| **Webhook backend** | **Render free tier** | **`render.yaml` — stable public URL for all 4 integrations** |
 | Email (primary) | Resend free tier | Integrated — `agent/email_handler.py` |
 | SMS (secondary) | Africa's Talking sandbox | Integrated — `agent/sms_handler.py` |
 | CRM | HubSpot Developer Sandbox (MCP) | Integrated — `agent/hubspot_mcp.py` |
@@ -135,14 +136,39 @@ cp .env.example .env  # configure
 docker compose up
 ```
 
-### 6. Run the API server
+### 6. Run the API server (local)
 
 ```bash
 source .venv/bin/activate
 uvicorn agent.main:app --reload --port 8000
 ```
 
-### 7. Trigger a test outreach
+### 7. Deploy to Render (webhook backend)
+
+Render provides a stable public URL — required so Resend, Africa's Talking, and Cal.com can
+reach your webhook endpoints. No credit card required.
+
+```
+1. Push this repo to GitHub
+2. Go to https://render.com → New → Web Service → Connect your repo
+3. Render auto-detects render.yaml and pre-fills all settings
+4. Add secret env vars in the Render dashboard (all marked sync: false in render.yaml):
+     RESEND_API_KEY, AT_API_KEY, HUBSPOT_ACCESS_TOKEN, CALCOM_API_KEY,
+     LANGFUSE_PUBLIC_KEY, LANGFUSE_SECRET_KEY, OPENROUTER_API_KEY,
+     STAFF_SINK_EMAIL, STAFF_SINK_PHONE, SDR_EMAIL, CALCOM_BASE_URL
+5. Deploy — Render returns a URL like: https://conversion-engine.onrender.com
+
+Register that URL once across all four integrations:
+  • Resend:            Dashboard → Webhooks → https://<your-url>/webhooks/email
+  • Africa's Talking:  Dashboard → SMS → Callback URL → https://<your-url>/webhooks/sms
+  • Cal.com:           Admin → Webhooks → https://<your-url>/webhooks/cal
+  • HubSpot:           (events flow outbound only; no inbound webhook needed)
+
+OUTBOUND_LIVE is intentionally NOT set in render.yaml — all outbound routes to the
+staff sink until you add that env var in the Render dashboard and get staff approval.
+```
+
+### 8. Trigger a test outreach
 
 ```bash
 curl -X POST http://localhost:8000/outreach/trigger \
@@ -179,6 +205,7 @@ The_Conversion_Engine/
 ├── README.md
 ├── ARCHITECTURE.md
 ├── Dockerfile
+├── render.yaml                    ← Render free-tier deploy config (webhook backend)
 ├── requirements.txt
 ├── .env.example
 ├── .gitignore
