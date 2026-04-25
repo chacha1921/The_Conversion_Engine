@@ -243,6 +243,58 @@ The_Conversion_Engine/
 
 ---
 
+## Handoff Notes — Known Limitations & Next Steps
+
+This section is written for the engineer who inherits this system. Everything below is a concrete technical debt, a fragile area, or a suggested improvement — not aspirational polish.
+
+### Critical before going live
+
+**1. P-004 conflict-signal prompt constraint is missing (highest priority)**
+When `HiringSignalBrief.honesty_flags` contains `conflicting_segment_signals`, the LLM currently references both the layoff event and the leadership change in the same email. Residual trigger rate: 3/10. Fix: add a hard rule to `agent/llm_composer.py` system prompt — "If honesty_flags includes conflicting_segment_signals, reference only the primary_segment_match signal in the email body and suppress the secondary signal." Expected: <1/10 after fix. Do not expand beyond Segment 1 without this fix.
+
+**2. HubSpot sandbox lacks custom properties**
+`agent/hubspot_mcp.py` attempts to write `icp_segment`, `ai_maturity_score`, `enrichment_timestamp`, `tenacious_status`, and `notes_last_contacted`. The sandbox token does not have `crm.schemas.contacts.write` scope, so these properties don't exist. The code falls back to stripping them and writing only standard fields. In production: create the five custom properties in HubSpot Admin → Properties before enabling live outbound. See `_CUSTOM_PROPS` set in `agent/hubspot_mcp.py`.
+
+**3. Bench data is static and goes stale**
+`tenacious_sales_data/seed/bench_summary.json` is a snapshot. If this file is not refreshed before each outreach run, the agent may commit to engineer capacity that no longer exists. Fix: wire a weekly cron job that pulls live bench data from Tenacious's internal staffing system and overwrites `bench_summary.json`. Without this, P-009 (bench over-commitment) will regress.
+
+**4. Cal.com API key is unpopulated**
+`CALCOM_API_KEY` is empty in `.env`. `agent/cal_booking.py` currently returns a static fallback URL (`http://localhost:3000`). In production: get the API key from the Cal.com admin panel and set `CALCOM_BASE_URL` to the deployed Cal.com instance URL.
+
+---
+
+### Fragile areas
+
+**5. `_load_cached_briefs()` fast-path can silently hide stale data**
+`agent/enrichment/pipeline.py` skips the full enrichment pipeline if all three JSON files exist in `data/briefs/<company>/` and any `per_signal_confidence` value is >0. If those files are outdated (e.g. funding event is now 200+ days old), the system will send stale signal data without warning. Fix: add a freshness check — if `hiring_signal_brief.generated_at` is older than 7 days, force re-enrichment.
+
+**6. `data/threads.json` is a flat JSON file with no locking**
+`agent/thread_store.py` reads and writes a single JSON file on every request. Under concurrent load (multiple webhooks arriving simultaneously), this will corrupt. Fix: replace with SQLite (`threads.db`) using `with sqlite3.connect(...) as conn: conn.execute("BEGIN EXCLUSIVE")` — the `thread_store.py` interface is already abstracted so the swap is mechanical.
+
+**7. Tone guard fails open on Anthropic credit exhaustion**
+`agent/tone_guard.py` catches `anthropic.BadRequestError` for credit balance errors and returns `(True, 10, "skipped")`. This means drafts skip tone review silently when the Anthropic account is out of credits. Fix: add a separate `TONE_GUARD_ENABLED` kill-switch so the operator knows the check is bypassed.
+
+**8. OpenRouter model ID must not have `openrouter/` prefix**
+`agent/llm_composer.py` sets `_DEV_MODEL = os.getenv("OPENROUTER_MODEL", "qwen/qwen3-next-80b-a3b-thinking")`. If you set `OPENROUTER_MODEL=openrouter/qwen/...` in `.env`, LiteLLM will fail silently and fall back to the template email. The correct format is `qwen/qwen3-next-80b-a3b-thinking` (no prefix).
+
+---
+
+### Suggested future improvements
+
+**9. Replace per-signal confidence with a calibrated Platt-scaled score**
+Current `per_signal_confidence` values in `hiring_signal_brief.json` are heuristic (manually tuned weights). A properly calibrated scorer trained on historical Tenacious outreach outcomes would reduce the 18% abstention rate and improve signal-to-noise.
+
+**10. Add a reply-rate feedback loop to the ICP classifier**
+`agent/icp_classifier.py` never learns. When a prospect replies (inbound webhook hit), log `(segment, confidence, replied=True)` to a feedback table. After 200+ events, retrain the classifier on real reply data to replace the benchmark projections used in the memo.
+
+**11. Multi-SDR coordination is not tested under load**
+`agent/thread_store.py` enforces one active thread per `(company_id, contact_id)`. But if two Tenacious SDRs independently trigger outreach to the same company's CEO and CTO, the system creates two separate threads (different `contact_id`). Add a company-level lock: before creating any new thread for a company, check if any active thread exists for that `company_id` across all contacts and suppress if found.
+
+**12. τ²-Bench evaluation needs the 9 infrastructure-error tasks re-run**
+`method/held_out_traces.jsonl` contains 9 tasks (36, 38, 39, 40, 45, 60, 62, 68, 70) that failed with `termination_reason: infrastructure_error` and `duration: 0.0` — the model never ran. These inflate the failure count. Re-running these 9 tasks (estimated cost: <$1) would give a cleaner pass@1 estimate.
+
+---
+
 ## Budget
 
 | Layer | Cost |
