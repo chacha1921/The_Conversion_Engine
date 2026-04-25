@@ -2,7 +2,7 @@
 SMS handler — Africa's Talking sandbox.
 Secondary channel: warm leads only (after email reply).
 Kill-switch enforced. STOP/HELP/UNSUB handled.
-All outbound routed to staff sink during challenge week unless OUTBOUND_LIVE=true.
+All outbound routed to staff sink during challenge week unless TENACIOUS_OUTBOUND_ENABLED=true.
 """
 from __future__ import annotations
 import logging
@@ -34,7 +34,7 @@ def _init():
 # ── Send ───────────────────────────────────────────────────────────────
 def send(to: str, message: str, company_id: str = "", contact_id: str = "") -> dict:
     """
-    Send an SMS. Routes to staff sink unless OUTBOUND_LIVE=true.
+    Send an SMS. Routes to staff sink unless TENACIOUS_OUTBOUND_ENABLED=true.
     Returns a result dict with 'success' and optional 'error'.
     Never raises.
     """
@@ -42,7 +42,7 @@ def send(to: str, message: str, company_id: str = "", contact_id: str = "") -> d
         logger.warning("sms.send called with empty recipient — skipping")
         return {"success": False, "error": "empty recipient"}
 
-    recipient = to if os.getenv("OUTBOUND_LIVE") else _STAFF_SINK_PHONE
+    recipient = to if os.getenv("TENACIOUS_OUTBOUND_ENABLED") else _STAFF_SINK_PHONE
 
     try:
         sms = _init()

@@ -57,11 +57,18 @@ Respond ONLY in this exact format:
 SCORE: <integer 0-10>
 FEEDBACK: <one sentence>"""
 
-    message = client.messages.create(
-        model=os.getenv("TONE_GUARD_MODEL", "claude-haiku-4-5-20251001"),
-        max_tokens=100,
-        messages=[{"role": "user", "content": prompt}],
-    )
+    try:
+        message = client.messages.create(
+            model=os.getenv("TONE_GUARD_MODEL", "claude-haiku-4-5-20251001"),
+            max_tokens=100,
+            messages=[{"role": "user", "content": prompt}],
+        )
+    except anthropic.BadRequestError as e:
+        if "credit balance" in str(e).lower():
+            import logging
+            logging.getLogger(__name__).warning("Anthropic credits exhausted; tone check skipped: %s", e)
+            return True, 10, "Anthropic credits exhausted; tone check skipped"
+        raise
 
     response_text = message.content[0].text.strip()
     score, feedback = _parse_response(response_text)

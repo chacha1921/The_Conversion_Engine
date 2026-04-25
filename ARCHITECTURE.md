@@ -105,7 +105,7 @@ An Automated Lead Generation and Conversion System for Tenacious Consulting and 
 │    · Honesty constraint                (< 5 open roles → no "scaling")      │
 │    · Draft metadata                    (all Tenacious-branded output tagged  │
 │                                         draft: true in message metadata)     │
-│    · Kill-switch check                 (OUTBOUND_LIVE env var must be set;  │
+│    · Kill-switch check                 (TENACIOUS_OUTBOUND_ENABLED env var must be set;  │
 │                                         default routes to staff sink)        │
 └──────┬────────────────────────────────────────────────┬──────────────────────┘
        │                                                │
@@ -279,7 +279,7 @@ Below-confidence threshold → send generic exploratory email; no segment-specif
 | Tone-guard | Second model call checks every draft against `style_guide.md`; regenerates if below threshold; extra call cost must be logged |
 | Multi-thread isolation | Each prospect gets an isolated conversation store keyed by `(company_id, contact_id)`; no context shared across contacts at the same company |
 | Draft metadata | All Tenacious-branded content (emails, call scripts, pricing quotes) tagged `"draft": true` in message metadata |
-| Kill-switch | `OUTBOUND_LIVE=true` environment variable must be explicitly set; default (unset) routes all outbound to staff sink |
+| Kill-switch | `TENACIOUS_OUTBOUND_ENABLED=true` environment variable must be explicitly set; default (unset) routes all outbound to staff sink |
 
 ---
 
@@ -397,20 +397,20 @@ Register the Render URL once in each provider dashboard:
 - **Africa's Talking** → SMS → Callback URL → `https://<url>/webhooks/sms`
 - **Cal.com** → Admin → Webhooks → `https://<url>/webhooks/cal`
 
-`OUTBOUND_LIVE` is deliberately absent from `render.yaml` — all outbound defaults to the
+`TENACIOUS_OUTBOUND_ENABLED` is deliberately absent from `render.yaml` — all outbound defaults to the
 staff sink on Render exactly as it does locally.
 
 #### Kill-Switch
 Every code path that sends real outbound must check:
 ```python
 import os
-if not os.getenv("OUTBOUND_LIVE"):
+if not os.getenv("TENACIOUS_OUTBOUND_ENABLED"):
     route_to_staff_sink(message)
     return
 send_real_outbound(message)
 ```
-- `OUTBOUND_LIVE` **unset** = default = staff sink (safe)
-- `OUTBOUND_LIVE=true` = live outbound (requires explicit opt-in)
+- `TENACIOUS_OUTBOUND_ENABLED` **unset** = default = staff sink (safe)
+- `TENACIOUS_OUTBOUND_ENABLED=true` = live outbound (requires explicit opt-in)
 - README.md must document this flag explicitly
 - Kill-switch must be wired at the email handler, SMS handler, and voice handler levels
 
@@ -492,7 +492,7 @@ Prospect identified from Crunchbase ODM
   │    ├─ RAG over relevant seed materials injected into context
   │    ├─ tone-guard check vs style_guide.md (regenerate if fails)
   │    ├─ draft: true metadata applied
-  │    └─ kill-switch checked (OUTBOUND_LIVE must be set)
+  │    └─ kill-switch checked (TENACIOUS_OUTBOUND_ENABLED must be set)
   │
   ├─ Email sent via Resend / MailerSend
   │
@@ -531,7 +531,7 @@ Prospect identified from Crunchbase ODM
 The_Conversion_Engine/
 ├── ARCHITECTURE.md
 ├── README.md                         ← setup + kill-switch documentation
-├── .env.example                      ← OUTBOUND_LIVE not set by default
+├── .env.example                      ← TENACIOUS_OUTBOUND_ENABLED not set by default
 │
 ├── seed/                             ← Tenacious source-of-truth materials (Day 0)
 │   ├── icp_definition.md

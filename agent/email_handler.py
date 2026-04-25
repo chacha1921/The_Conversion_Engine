@@ -1,6 +1,6 @@
 """
 Email handler — Resend (primary) with MailerSend fallback.
-Kill-switch: OUTBOUND_LIVE env var must be set to route to real recipients.
+Kill-switch: TENACIOUS_OUTBOUND_ENABLED env var must be set to route to real recipients.
 All Tenacious-branded content tagged draft:true in metadata.
 """
 from __future__ import annotations
@@ -67,7 +67,7 @@ class SendResult:
 # ── Send ───────────────────────────────────────────────────────────────
 def send(msg: EmailMessage) -> SendResult:
     """
-    Send an email. Routes to staff sink unless OUTBOUND_LIVE=true.
+    Send an email. Routes to staff sink unless TENACIOUS_OUTBOUND_ENABLED=true.
     Returns a SendResult — never raises.
     """
     api_key = os.getenv("RESEND_API_KEY", "")
@@ -76,7 +76,7 @@ def send(msg: EmailMessage) -> SendResult:
         return SendResult(success=False, error="RESEND_API_KEY not configured", error_type="auth")
 
     resend.api_key = api_key
-    recipient = msg.to if os.getenv("OUTBOUND_LIVE") else _STAFF_SINK
+    recipient = msg.to if os.getenv("TENACIOUS_OUTBOUND_ENABLED") else _STAFF_SINK
 
     meta = dict(msg.metadata or {})
     meta.setdefault("draft", True)
@@ -89,6 +89,7 @@ def send(msg: EmailMessage) -> SendResult:
         "subject": msg.subject,
         "html": msg.html,
         "reply_to": msg.reply_to,
+        "headers": {"X-Tenacious-Status": "draft"},
         "tags": [{"name": k, "value": str(v)} for k, v in meta.items()],
     }
 

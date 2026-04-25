@@ -1,0 +1,39 @@
+services:
+  cal-db:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: cal
+      POSTGRES_PASSWORD: cal
+      POSTGRES_DB: cal
+    volumes:
+      - cal_db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U cal"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  cal:
+    image: calcom/cal.com:latest
+    platform: linux/amd64
+    depends_on:
+      cal-db:
+        condition: service_healthy
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: postgresql://cal:cal@cal-db:5432/cal
+      DATABASE_DIRECT_URL: postgresql://cal:cal@cal-db:5432/cal
+      NEXTAUTH_SECRET: local-dev-secret-do-not-use-in-prod
+      NEXTAUTH_URL: http://localhost:3000
+      NEXT_PUBLIC_WEBAPP_URL: http://localhost:3000
+      CALENDSO_ENCRYPTION_KEY: local-dev-encryption-key-32chars
+      DATABASE_MIGRATION_RUN: "true"
+      EMAIL_FROM: noreply@localhost
+      EMAIL_SERVER_HOST: ""
+      EMAIL_SERVER_PORT: ""
+      EMAIL_SERVER_USER: ""
+      EMAIL_SERVER_PASSWORD: ""
+
+volumes:
+  cal_db_data:

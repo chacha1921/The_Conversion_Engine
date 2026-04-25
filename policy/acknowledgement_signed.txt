@@ -1,0 +1,13 @@
+Acknowledgement confirmed by program staff.
+
+Trainee:         Chalie Lijam
+Trainee email:   chalie@10academy.org
+Program cohort:  TRP1 Week 10
+Signed at (UTC): 2026-04-25T00:00:00Z
+
+Policies acknowledged:
+  - policy/data_handling_policy.md (all 10 rules)
+  - infra/killswitch.md (TENACIOUS_OUTBOUND_ENABLED flag)
+  - LICENSE.md (seed material limited license)
+
+Confirmation received from program staff via Slack (#trp1-week10-conversion-engine).

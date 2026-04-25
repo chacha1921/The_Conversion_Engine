@@ -48,5 +48,5 @@ services:
       - key: LANGFUSE_SECRET_KEY
         sync: false
       # ── Kill-switch: leave UNSET on Render unless staff approves live ──
-      # - key: OUTBOUND_LIVE
+      # - key: TENACIOUS_OUTBOUND_ENABLED
       #   value: "true"

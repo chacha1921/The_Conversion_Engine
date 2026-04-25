@@ -1,0 +1,116 @@
+{
+  "datasync-ai::cto@datasyncai.io": {
+    "company_id": "datasync-ai",
+    "contact_id": "cto@datasyncai.io",
+    "contact_email": "cto@datasyncai.io",
+    "contact_phone": null,
+    "segment": "recently_funded_series_a_b",
+    "messages": [
+      {
+        "role": "agent",
+        "content": "Elena,\n\nYou closed a $15M Series A 74 days ago with 8 open engineering roles. Peer companies show public signals of dedicated AI leadership roles. How are you structuring yours?\n\nWe deploy ML engineers ready in 7 days, embedded in your stack with 3-hour Pacific overlap. Not a staffing agency \u2014 a delivery team.\n\nWorth 15 minutes Thursday or Friday to walk through? \u2192 cal.com/tenacious/ai\n\nElena\nResearch Partner, Tenacious Intelli",
+        "channel": "email",
+        "timestamp": "2026-04-25T13:35:31.578534+00:00"
+      },
+      {
+        "role": "agent",
+        "content": "",
+        "channel": "email",
+        "timestamp": "2026-04-25T13:36:11.460428+00:00"
+      },
+      {
+        "role": "agent",
+        "content": "Alex,\n\nYou closed $15M Series A 74 days ago with 8 engineering roles open. Teams with 8+ roles typically take months to fill specialized AI leadership positions.\n\nWe deliver Chief Scientist-level talent embedded in your stack, Pacific time overlap, ready in 14 days \u2014 delivery team, not staffing agency.\n\nWorth 15 minutes next Wednesday? \u2192 [Cal link]\n\nAlex  \nResearch Partner, Tenacious Intelli",
+        "channel": "email",
+        "timestamp": "2026-04-25T14:06:24.820301+00:00"
+      }
+    ],
+    "outreach_count": 3,
+    "opted_out": false,
+    "last_activity": "2026-04-25T14:06:24.820315+00:00"
+  },
+  "datasync-ai::chalielijalem@gmail.com": {
+    "company_id": "datasync-ai",
+    "contact_id": "chalielijalem@gmail.com",
+    "contact_email": "chalielijalem@gmail.com",
+    "contact_phone": null,
+    "segment": "recently_funded_series_a_b",
+    "messages": [
+      {
+        "role": "agent",
+        "content": "Priya,\n\nYou closed a $15M Series A 74 days ago and have 8 open engineering roles. Series A AI companies often struggle with feature drift without automated MLOps checks.\n\nWe embed senior ML engineers experienced in setting up drift tests and schema validation. No staffing agency \u2014 a dedicated delivery team.\n\nWorth 15 minutes Tuesday or Wednesday? \u2192 [Cal link]\n\nElena\nResearch Partner, Tenacious",
+        "channel": "email",
+        "timestamp": "2026-04-25T20:04:56.976487+00:00"
+      },
+      {
+        "role": "agent",
+        "content": "Priya,\n\nYou closed a $15M Series A 74 days ago with 8 open engineering roles. MLOps feature validation is a common bottleneck for scaling AI teams.\n\nWe embed engineers for automated drift tests and schema checks \u2014 ready in 14 days, 3-hour Pacific overlap. Not a staffing agency.\n\nWorth 15 minutes Tuesday? \u2192 [Cal link]\n\nPriya\nResearch Partner, Tenacious Intelli",
+        "channel": "email",
+        "timestamp": "2026-04-25T20:11:47.350185+00:00"
+      },
+      {
+        "role": "agent",
+        "content": "Priya,\n\nDataSync AI closed a $15M Series A 74 days ago with 8 engineering roles open. Post-Series A teams commonly face quality degradation as AI feature velocity increases. \n\nWe deploy MLOps engineers who automate drift testing and schema validation for every feature push \u2014 like Tecton and Hopsworks in your peer group. \n\nWorth 15 minutes tomorrow? \u2192 [cal.link]\n\nPriya\nResearch Partner, Tenacious Intelli",
+        "channel": "email",
+        "timestamp": "2026-04-25T20:14:06.392260+00:00"
+      },
+      {
+        "role": "agent",
+        "content": "Priya,\n\nYou closed a $15M Series A 74 days ago and have eight engineering roles open publicly. Tecton and Hopsworks automate MLOps drift tests for each feature push \u2014 most companies at your stage lack this capability.\n\nWe deploy ML engineers to build automated validation pipelines, ready to scale within 7 days. Can we discuss this in 15 minutes Wednesday? \u2192 [Cal link]\n\nPriya\nResearch Partner, Tenacious\ngettenacious.com",
+        "channel": "email",
+        "timestamp": "2026-04-25T20:42:31.637760+00:00"
+      }
+    ],
+    "outreach_count": 4,
+    "opted_out": false,
+    "last_activity": "2026-04-25T20:42:31.637765+00:00"
+  },
+  "gmail::chalielijalem@gmail.com": {
+    "company_id": "gmail",
+    "contact_id": "chalielijalem@gmail.com",
+    "contact_email": "chalielijalem@gmail.com",
+    "contact_phone": null,
+    "segment": null,
+    "messages": [
+      {
+        "role": "prospect",
+        "content": "Interesting \u2014 we are actually looking to scale our ML platform team. What does Tenacious typically provide for feature pipeline reliability work?",
+        "channel": "email",
+        "timestamp": "2026-04-25T20:05:05.683747+00:00"
+      },
+      {
+        "role": "agent",
+        "content": "Thanks for your reply! To book a 30-minute discovery call, use this link: http://localhost:3000/discovery-call?email=chalielijalem@gmail.com",
+        "channel": "email",
+        "timestamp": "2026-04-25T20:05:08.577773+00:00"
+      },
+      {
+        "role": "prospect",
+        "content": "Interesting \u2014 we are actually looking to scale our ML platform team. What does Tenacious typically provide for feature pipeline reliability work?",
+        "channel": "email",
+        "timestamp": "2026-04-25T20:15:58.792324+00:00"
+      },
+      {
+        "role": "agent",
+        "content": "Thanks for your reply! To book a 30-minute discovery call, use this link: http://localhost:3000/discovery-call?email=chalielijalem@gmail.com",
+        "channel": "email",
+        "timestamp": "2026-04-25T20:16:02.865147+00:00"
+      },
+      {
+        "role": "prospect",
+        "content": "Interesting \u2014 we are actually looking to scale our ML platform team. What does Tenacious typically provide for feature pipeline reliability work?",
+        "channel": "email",
+        "timestamp": "2026-04-25T20:43:36.356038+00:00"
+      },
+      {
+        "role": "agent",
+        "content": "Thanks for your reply! To book a 30-minute discovery call, use this link: http://localhost:3000/discovery-call?email=chalielijalem@gmail.com",
+        "channel": "email",
+        "timestamp": "2026-04-25T20:43:40.431911+00:00"
+      }
+    ],
+    "outreach_count": 3,
+    "opted_out": false,
+    "last_activity": "2026-04-25T20:43:40.431948+00:00"
+  }
+}

@@ -176,6 +176,26 @@ def handle_booking_webhook(payload: dict, hubspot_contact_id: Optional[str] = No
                     "Cal.com → HubSpot sync failed — contact=%s booking=%s",
                     contact_id, uid,
                 )
+
+            # ── Generate and log discovery call context brief ─────────
+            try:
+                from .discovery_brief import generate_and_log
+                generate_and_log(
+                    prospect_name=prospect_name,
+                    prospect_email=prospect_email,
+                    prospect_company=title,
+                    booking_uid=uid,
+                    start_time=start_time,
+                    hubspot_contact_id=contact_id,
+                )
+                event["discovery_brief_logged"] = True
+                logger.info(
+                    "Discovery brief generated and logged — contact=%s booking=%s",
+                    contact_id, uid,
+                )
+            except Exception as e:
+                logger.error("Discovery brief generation failed: %s", e)
+                event["discovery_brief_logged"] = False
         else:
             logger.warning(
                 "Cal.com booking confirmed but no HubSpot contact found for %s",

@@ -1,7 +1,6 @@
 """
 AI maturity scorer (0–3) based on public signals.
-All signals are derived from data already collected by other enrichment modules
-or passed in as text extracted from job posts / web scraping.
+Signal names match schemas/hiring_signal_brief.schema.json enum exactly.
 """
 from __future__ import annotations
 from dataclasses import dataclass
@@ -9,16 +8,13 @@ from typing import Optional
 
 from .models import AIMaturitySignal
 
-# Weight mapping: high=3, medium=2, low=1
 _WEIGHTS = {"high": 3, "medium": 2, "low": 1}
 
-# Thresholds to map weighted sum → 0-3 score
-# Max possible weighted sum = (3+3+2+2+1+1) = 12
 _THRESHOLDS = [
-    (9, 3),   # strong signal → score 3
-    (5, 2),   # moderate → score 2
-    (2, 1),   # weak → score 1
-    (0, 0),   # none → score 0
+    (9, 3),
+    (5, 2),
+    (2, 1),
+    (0, 0),
 ]
 
 AI_ROLE_KEYWORDS = [
@@ -41,19 +37,17 @@ AI_LEADERSHIP_TITLES = [
 
 @dataclass
 class RawSignals:
-    job_titles: list[str]                  # all open role titles (lowercase)
+    job_titles: list[str]
     total_open_roles: int
-    leadership_titles: list[str]           # team page titles (lowercase)
-    github_ai_repos: int                   # count of AI-adjacent public repos
-    exec_ai_commentary: bool               # CEO/CTO mentioned AI in last 12 months
-    ml_stack_tools: list[str]              # detected tools (lowercase)
-    ai_in_strategic_comms: bool            # annual report / fundraising doc
+    leadership_titles: list[str]
+    github_ai_repos: int
+    exec_ai_commentary: bool
+    ml_stack_tools: list[str]
+    ai_in_strategic_comms: bool
 
 
 def score(signals: RawSignals) -> tuple[int, str, list[AIMaturitySignal]]:
-    """
-    Returns (score 0-3, confidence 'low'|'medium'|'high', signal list).
-    """
+    """Returns (score 0-3, confidence 'low'|'medium'|'high', signal list)."""
     evidence: list[AIMaturitySignal] = []
     weighted_sum = 0.0
     signal_count = 0
@@ -67,8 +61,9 @@ def score(signals: RawSignals) -> tuple[int, str, list[AIMaturitySignal]]:
     ai_roles_present = ai_role_fraction >= 0.10 or ai_role_count >= 2
 
     evidence.append(AIMaturitySignal(
-        signal="AI-adjacent open roles",
+        signal="ai_adjacent_open_roles",
         weight="high",
+        confidence="high" if ai_roles_present else "low",
         present=ai_roles_present,
         evidence=f"{ai_role_count} AI roles of {signals.total_open_roles} total ({ai_role_fraction:.0%})",
     ))
@@ -81,8 +76,9 @@ def score(signals: RawSignals) -> tuple[int, str, list[AIMaturitySignal]]:
         for title in signals.leadership_titles
     )
     evidence.append(AIMaturitySignal(
-        signal="Named AI/ML leadership",
+        signal="named_ai_ml_leadership",
         weight="high",
+        confidence="high" if leadership_ai else "low",
         present=leadership_ai,
         evidence=", ".join(signals.leadership_titles[:3]) if signals.leadership_titles else "none found",
     ))
@@ -93,8 +89,9 @@ def score(signals: RawSignals) -> tuple[int, str, list[AIMaturitySignal]]:
     # ── Medium weight signals ──────────────────────────────────────────
     github_active = signals.github_ai_repos >= 2
     evidence.append(AIMaturitySignal(
-        signal="Public GitHub AI/ML repo activity",
+        signal="github_org_activity",
         weight="medium",
+        confidence="medium" if github_active else "low",
         present=github_active,
         evidence=f"{signals.github_ai_repos} AI-adjacent repos found",
     ))
@@ -103,8 +100,9 @@ def score(signals: RawSignals) -> tuple[int, str, list[AIMaturitySignal]]:
         signal_count += 1
 
     evidence.append(AIMaturitySignal(
-        signal="Exec AI commentary (last 12 months)",
+        signal="executive_commentary",
         weight="medium",
+        confidence="medium" if signals.exec_ai_commentary else "low",
         present=signals.exec_ai_commentary,
         evidence="CEO/CTO mentioned AI as strategic priority" if signals.exec_ai_commentary else "no public commentary found",
     ))
@@ -116,8 +114,9 @@ def score(signals: RawSignals) -> tuple[int, str, list[AIMaturitySignal]]:
     ml_stack_found = [t for t in signals.ml_stack_tools if t in ML_STACK_TOOLS]
     ml_stack_present = len(ml_stack_found) >= 1
     evidence.append(AIMaturitySignal(
-        signal="Modern ML stack detected",
+        signal="modern_data_ml_stack",
         weight="low",
+        confidence="medium" if ml_stack_present else "low",
         present=ml_stack_present,
         evidence=", ".join(ml_stack_found) if ml_stack_found else "none detected",
     ))
@@ -126,8 +125,9 @@ def score(signals: RawSignals) -> tuple[int, str, list[AIMaturitySignal]]:
         signal_count += 1
 
     evidence.append(AIMaturitySignal(
-        signal="AI in strategic comms",
+        signal="strategic_communications",
         weight="low",
+        confidence="medium" if signals.ai_in_strategic_comms else "low",
         present=signals.ai_in_strategic_comms,
         evidence="AI named in fundraising/annual report" if signals.ai_in_strategic_comms else "not found",
     ))
@@ -143,9 +143,7 @@ def score(signals: RawSignals) -> tuple[int, str, list[AIMaturitySignal]]:
             break
 
     # ── Confidence ────────────────────────────────────────────────────
-    high_signals_present = sum(
-        1 for e in evidence if e.weight == "high" and e.present
-    )
+    high_signals_present = sum(1 for e in evidence if e.weight == "high" and e.present)
     if high_signals_present >= 2:
         confidence = "high"
     elif high_signals_present == 1 or signal_count >= 3:

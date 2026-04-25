@@ -1,0 +1,120 @@
+{
+  "prospect_domain": "",
+  "prospect_name": "DataSync AI",
+  "primary_segment_match": "abstain",
+  "segment_confidence": 0.0,
+  "data_sources_checked": [
+    {
+      "source": "crunchbase_odm",
+      "status": "no_data",
+      "error_message": null,
+      "fetched_at": "2026-04-25T20:45:30.462930Z"
+    },
+    {
+      "source": "layoffs_fyi",
+      "status": "no_data",
+      "error_message": null,
+      "fetched_at": "2026-04-25T20:45:30.462930Z"
+    },
+    {
+      "source": "crunchbase_people",
+      "status": "no_data",
+      "error_message": null,
+      "fetched_at": "2026-04-25T20:45:30.462930Z"
+    },
+    {
+      "source": "company_careers_page",
+      "status": "error",
+      "error_message": "asyncio.run() cannot be called from a running event loop",
+      "fetched_at": "2026-04-25T20:45:30.462930Z"
+    }
+  ],
+  "honesty_flags": [
+    "weak_hiring_velocity_signal",
+    "weak_ai_maturity_signal"
+  ],
+  "company_name": "DataSync AI",
+  "crunchbase_id": "not-found",
+  "funding_event": null,
+  "hiring_velocity": {
+    "open_roles_today": 0,
+    "open_roles_60_days_ago": 0,
+    "velocity_label": "insufficient_signal",
+    "signal_confidence": 0.5,
+    "sources": [
+      "company_careers_page"
+    ]
+  },
+  "open_role_count": 0,
+  "job_post_velocity_60d": null,
+  "weak_signal": true,
+  "layoff_event": null,
+  "leadership_change": null,
+  "ai_maturity_score": 0,
+  "ai_maturity_confidence": "low",
+  "ai_maturity_signals": [
+    {
+      "signal": "ai_adjacent_open_roles",
+      "weight": "high",
+      "present": false,
+      "confidence": "low",
+      "evidence": "0 AI roles of 0 total (0%)",
+      "source_url": null
+    },
+    {
+      "signal": "named_ai_ml_leadership",
+      "weight": "high",
+      "present": false,
+      "confidence": "low",
+      "evidence": "none found",
+      "source_url": null
+    },
+    {
+      "signal": "github_org_activity",
+      "weight": "medium",
+      "present": false,
+      "confidence": "low",
+      "evidence": "0 AI-adjacent repos found",
+      "source_url": null
+    },
+    {
+      "signal": "executive_commentary",
+      "weight": "medium",
+      "present": false,
+      "confidence": "low",
+      "evidence": "no public commentary found",
+      "source_url": null
+    },
+    {
+      "signal": "modern_data_ml_stack",
+      "weight": "low",
+      "present": false,
+      "confidence": "low",
+      "evidence": "none detected",
+      "source_url": null
+    },
+    {
+      "signal": "strategic_communications",
+      "weight": "low",
+      "present": false,
+      "confidence": "low",
+      "evidence": "not found",
+      "source_url": null
+    }
+  ],
+  "per_signal_confidence": {
+    "ai_adjacent_open_roles": 0.0,
+    "named_ai_ml_leadership": 0.0,
+    "github_org_activity": 0.0,
+    "executive_commentary": 0.0,
+    "modern_data_ml_stack": 0.0,
+    "strategic_communications": 0.0
+  },
+  "bench_to_brief_match": {
+    "required_stacks": [],
+    "bench_available": true,
+    "gaps": []
+  },
+  "tech_stack": [],
+  "generated_at": "2026-04-25T20:45:30.506815"
+}

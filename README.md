@@ -95,7 +95,7 @@ playwright install chromium
 ```bash
 cp .env.example .env
 # Fill in all values in .env
-# OUTBOUND_LIVE is intentionally left unset — routes to staff sink by default
+# TENACIOUS_OUTBOUND_ENABLED is intentionally left unset — routes to staff sink by default
 ```
 
 ### 3. Download data files
@@ -164,7 +164,7 @@ Register that URL once across all four integrations:
   • Cal.com:           Admin → Webhooks → https://<your-url>/webhooks/cal
   • HubSpot:           (events flow outbound only; no inbound webhook needed)
 
-OUTBOUND_LIVE is intentionally NOT set in render.yaml — all outbound routes to the
+TENACIOUS_OUTBOUND_ENABLED is intentionally NOT set in render.yaml — all outbound routes to the
 staff sink until you add that env var in the Render dashboard and get staff approval.
 ```
 
@@ -185,12 +185,12 @@ curl -X POST http://localhost:8000/outreach/trigger \
 
 ## Kill-Switch
 
-**OUTBOUND_LIVE is unset by default.** All outbound (email + SMS) routes to the staff sink.
+**TENACIOUS_OUTBOUND_ENABLED is unset by default.** All outbound (email + SMS) routes to the staff sink.
 
 To enable live outbound (only after program staff approval):
 
 ```bash
-export OUTBOUND_LIVE=true
+export TENACIOUS_OUTBOUND_ENABLED=true
 ```
 
 This flag must be explicitly set at the email handler, SMS handler, and voice handler levels.
