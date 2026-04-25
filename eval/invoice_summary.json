@@ -1,0 +1,22 @@
+{
+  "generated_at": "2026-04-26T00:00:00Z",
+  "description": "Challenge-week LLM spend derived from eval/trace_log.jsonl (staff-provided baseline, 150 simulations)",
+  "trace_source": "eval/trace_log.jsonl",
+  "score_source": "eval/score_log.json",
+  "simulations": 150,
+  "total_llm_cost_usd": 2.9858,
+  "avg_cost_per_simulation_usd": 0.0199,
+  "rig_cost_usd": 0.00,
+  "resend_cost_usd": 0.00,
+  "africa_talking_cost_usd": 0.00,
+  "tone_guard_cost_per_call_usd": 0.002,
+  "tone_guard_avg_retries": 0.30,
+  "cost_per_qualified_lead_usd": 0.015,
+  "cost_per_qualified_lead_breakdown": {
+    "llm_compose_usd": 0.0120,
+    "tone_guard_usd": 0.0020,
+    "expected_regeneration_usd": 0.0006
+  },
+  "hard_cap_usd": 5.00,
+  "note": "Rig cost $0.00 — kill-switch unset, all outbound to staff sink. No Resend/AT charges incurred."
+}

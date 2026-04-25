@@ -3,35 +3,32 @@
 <head>
 <meta charset="UTF-8">
 <style>
-  @page { size: A4; margin: 12mm 16mm 12mm 16mm; }
+  @page { size: A4; margin: 9mm 13mm 9mm 13mm; }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: "Georgia", serif; font-size: 9.4pt; color: #111; line-height: 1.38; }
+  body { font-family: "Georgia", serif; font-size: 8.6pt; color: #111; line-height: 1.30; }
 
   .page { width: 100%; page-break-after: always; }
   .page:last-child { page-break-after: auto; }
 
-  h1 { font-size: 12pt; font-weight: bold; border-bottom: 2px solid #111; padding-bottom: 3px; margin-bottom: 4px; }
-  h2 { font-size: 9.4pt; font-weight: bold; text-transform: uppercase; letter-spacing: 0.04em;
-       color: #333; margin-top: 7px; margin-bottom: 2px; border-left: 3px solid #555; padding-left: 5px; }
-  h3 { font-size: 9.2pt; font-weight: bold; margin-top: 4px; margin-bottom: 1px; color: #222; }
-  p  { margin-bottom: 3px; }
-  ul { margin-left: 13px; margin-bottom: 2px; }
-  li { margin-bottom: 1px; }
+  h1 { font-size: 11pt; font-weight: bold; border-bottom: 2px solid #111; padding-bottom: 2px; margin-bottom: 3px; }
+  h2 { font-size: 8.6pt; font-weight: bold; text-transform: uppercase; letter-spacing: 0.04em;
+       color: #333; margin-top: 5px; margin-bottom: 1px; border-left: 3px solid #555; padding-left: 4px; }
+  h3 { font-size: 8.4pt; font-weight: bold; margin-top: 2px; margin-bottom: 1px; color: #222; }
+  p  { margin-bottom: 2px; }
 
-  table { width: 100%; border-collapse: collapse; font-size: 8.8pt; margin: 3px 0; }
-  th { background: #efefef; font-weight: bold; text-align: left; padding: 2px 5px; border: 1px solid #bbb; }
-  td { padding: 2px 5px; border: 1px solid #ccc; vertical-align: top; }
+  table { width: 100%; border-collapse: collapse; font-size: 7.9pt; margin: 2px 0; }
+  th { background: #efefef; font-weight: bold; text-align: left; padding: 1px 4px; border: 1px solid #bbb; }
+  td { padding: 1px 4px; border: 1px solid #ccc; vertical-align: top; }
 
-  .meta { font-size: 8.3pt; color: #555; margin-bottom: 5px; }
-  .meta span { margin-right: 12px; }
-  .src  { font-family: monospace; font-size: 7.8pt; color: #555; background: #f5f5f5;
-          padding: 0px 3px; border-radius: 2px; white-space: nowrap; }
+  .meta { font-size: 7.8pt; color: #555; margin-bottom: 4px; }
+  .meta span { margin-right: 10px; }
+  .src  { font-family: monospace; font-size: 7.2pt; color: #555; background: #f5f5f5;
+          padding: 0px 2px; border-radius: 2px; white-space: nowrap; }
   .green { color: #1a7a1a; font-weight: bold; }
   .red   { color: #b00; font-weight: bold; }
   .amber { color: #a06000; font-weight: bold; }
-  .note  { font-size: 8.2pt; color: #555; font-style: italic; }
-  .box   { border: 1px solid #bbb; padding: 4px 7px; margin: 3px 0; background: #fafafa; }
-  hr     { border: none; border-top: 1px solid #ccc; margin: 5px 0; }
+  .note  { font-size: 7.6pt; color: #555; font-style: italic; }
+  .box   { border: 1px solid #bbb; padding: 3px 6px; margin: 2px 0; background: #fafafa; }
 </style>
 </head>
 <body>
@@ -43,47 +40,48 @@
 <div class="meta">
   <span><strong>To:</strong> Tenacious CEO &amp; CFO</span>
   <span><strong>From:</strong> Chalie Lijam · TRP1 Week 10</span>
-  <span><strong>Date:</strong> 2026-04-25</span>
+  <span><strong>Date:</strong> 2026-04-26</span>
   <span><strong>Repo:</strong> The_Conversion_Engine / main</span>
 </div>
 
 <h2>1. Executive Summary</h2>
-<p>The Conversion Engine is a fully automated B2B outreach pipeline that enriches prospects from three public data sources (Crunchbase, layoffs.fyi, careers pages), classifies them into four ICP segments with a confidence-gated LLM email, and syncs every event to HubSpot in real time. On Tenacious-specific failure probes the system cuts bench over-commitment from 7/10 to 2/10 (p&lt;0.001) and tone non-compliance from 61% to 91% (p=0.003), at a cost of $0.015 per qualified lead — 333× under the $5 hard cap. We recommend a 30-day Segment 1 pilot at 50 leads/week before any further expansion.</p>
+<p>The Conversion Engine is a fully automated B2B outreach pipeline that enriches prospects from three public data sources (Crunchbase, layoffs.fyi, careers pages), classifies them into four ICP segments with a confidence-gated LLM, and syncs every event to HubSpot in real time. On τ²-Bench retail, the model passed 21/21 tasks it actually executed (pass@1 = 1.00 on executed tasks; 0.70 overall with 9 API-quota infrastructure errors); on Tenacious-specific probes it cut bench over-commitment by 42pp (p&lt;0.001) and tone non-compliance by 30pp (p=0.003), at $0.015 per qualified lead — 333× under the $5 hard cap. We recommend a 30-day Segment 1 pilot at 50 leads/week.</p>
 
 <h2>2. Cost per Qualified Lead</h2>
+<p class="note"><strong>Qualified lead defined:</strong> A prospect classified into a non-abstained ICP segment (confidence ≥ 0.40) who receives a signal-grounded email passing tone-guard validation. Abstained prospects (~18% of pipeline) are excluded.</p>
 <table>
   <tr><th>Component</th><th>Source</th><th>Amount</th></tr>
-  <tr><td>LLM composition (150 dev-slice simulations)</td><td><span class="src">eval/trace_log.jsonl</span></td><td>$2.99 total · $0.0199 avg/sim</td></tr>
-  <tr><td>Tone guard (Haiku 4.5, ~100 tokens/call)</td><td><span class="src">agent/tone_guard.py</span></td><td>$0.002/call</td></tr>
-  <tr><td>Expected regeneration (30% retry rate)</td><td><span class="src">method/ablation_results.json</span></td><td>$0.0006/lead</td></tr>
-  <tr><td><strong>Total per qualified lead</strong></td><td></td><td class="green"><strong>$0.015</strong> (hard cap: $5)</td></tr>
+  <tr><td>LLM composition (150 baseline sims)</td><td><span class="src">eval/invoice_summary.json · eval/trace_log.jsonl</span></td><td>$2.99 total · $0.0199 avg/sim</td></tr>
+  <tr><td>Tone guard (Claude Haiku 4.5, ~100 tokens/call)</td><td><span class="src">eval/invoice_summary.json · agent/tone_guard.py</span></td><td>$0.002/call</td></tr>
+  <tr><td>Expected regeneration (30% retry rate × $0.002)</td><td><span class="src">eval/invoice_summary.json · method/ablation_results.json</span></td><td>$0.0006/lead</td></tr>
+  <tr><td><strong>Total per qualified lead</strong></td><td><span class="src">eval/invoice_summary.json</span></td><td class="green"><strong>$0.015</strong> — hard cap: $5.00</td></tr>
 </table>
-<p class="note">Rig cost: $0.00 — all simulations ran on challenge-week provisioned API keys. No Resend or AT charges (kill-switch unset). Source: <span class="src">eval/score_log.json avg_agent_cost=0.0199</span></p>
+<p class="note">Rig cost: $0.00. All simulations on provisioned challenge-week keys. Kill-switch unset → $0 Resend + $0 AT charges. Source: <span class="src">eval/invoice_summary.json</span></p>
 
 <h2>3. Speed-to-Lead — Stalled-Thread Rate</h2>
-<p><strong>Definition used:</strong> A thread is <em>stalled</em> when no outbound agent action (email send, SMS, or booking-link delivery) occurs within 4 hours of an inbound prospect event (reply email or inbound SMS webhook). This is measurable directly from <span class="src">data/threads.json</span> timestamps.</p>
+<p class="note"><strong>Stalled defined:</strong> No outbound agent action within 4 hours of an inbound prospect event — measurable from <span class="src">data/threads.json</span> timestamps.</p>
 <table>
-  <tr><th>Condition</th><th>Stall rate (stalls / inbound events)</th><th>Measured response latency</th><th>Source</th></tr>
-  <tr><td>Tenacious manual (CEO/CFO estimate)</td><td class="red">30–40% stalled &gt;4 h</td><td>2–4 h median partner recall delay</td><td>Internal CEO/CFO estimate</td></tr>
-  <tr><td>System — challenge-week threads (n=3)</td><td class="green">0 / 3 = 0% stalled</td><td class="green">p50: 4.0 s · max: 4.1 s</td><td><span class="src">data/threads.json</span></td></tr>
+  <tr><th>Condition</th><th>Stall rate</th><th>Response latency</th><th>Source</th></tr>
+  <tr><td>Tenacious manual (CEO/CFO estimate)</td><td class="red">30–40% stalled &gt;4 h</td><td>2–4 h partner recall delay</td><td>Internal estimate</td></tr>
+  <tr><td>System — challenge-week (n=3 events)</td><td class="green">0/3 = 0% stalled</td><td class="green">p50: 4.0 s · max: 4.1 s</td><td><span class="src">data/threads.json · eval/trace_log.jsonl</span></td></tr>
 </table>
-<p class="note"><strong>Honest caveat:</strong> n=3 reply events (all simulated via webhook during challenge week — kill-switch prevented organic prospect replies). A 0% stall rate at n=3 is structurally guaranteed by synchronous dispatch in <span class="src">agent/email_handler.py</span>, not a statistical finding. Confirmation of real-world stall rate reduction requires 30-day pilot with live prospect replies. Projected live stall rate ≤20% based on assumption that context-recall delay drives 50% of manual stalls: 40% × (1−0.50) = 20%.</p>
+<p class="note"><strong>Caveat:</strong> n=3 (simulated webhooks only — kill-switch active). 0% is structurally guaranteed by synchronous dispatch in <span class="src">agent/email_handler.py</span>, not a statistical result. Projected live stall rate ≤20% (40% manual × 50% context-driven = 20%). Requires 30-day pilot to confirm.</p>
 
 <h2>4. Competitive-Gap Outbound Performance</h2>
 <table>
-  <tr><th>Outbound variant</th><th>Challenge-week sends</th><th>Signal injected</th><th>Challenge-week replies</th><th>Benchmark projection</th></tr>
-  <tr><td>Full method (non-abstained)</td><td>10 (staff sink)</td><td class="green">100% — hiring_brief + gap_brief in system prompt</td><td>3 simulated (organic: 0)</td><td class="green">7–12% (Woodpecker 2024)</td></tr>
-  <tr><td>Baseline (generic pitch)</td><td>0 sent this week</td><td class="red">0%</td><td>—</td><td class="red">2–4% (Woodpecker 2024)</td></tr>
-  <tr><td>Abstained (confidence &lt;0.40)</td><td>18% of triggers</td><td>Generic only</td><td>—</td><td>—</td></tr>
+  <tr><th>Variant</th><th>Sends (week)</th><th>Signal injected</th><th>Replies</th><th>Benchmark projection</th></tr>
+  <tr><td>Full method (non-abstained)</td><td>10 (staff sink)</td><td class="green">100% — hiring_brief + gap_brief</td><td>3 simulated; organic: 0</td><td class="green">7–12% (Woodpecker 2024)</td></tr>
+  <tr><td><span class="red">Baseline (generic pitch)</span></td><td><span class="red">0 — not sent</span></td><td class="red">0% — no signal injection</td><td class="red">not measurable</td><td class="red">2–4% (Woodpecker 2024)</td></tr>
+  <tr><td>Abstained (confidence &lt;0.40)</td><td>~18% of triggers</td><td>Generic only</td><td>—</td><td>—</td></tr>
 </table>
-<p class="note"><strong>Honest caveat:</strong> No organic reply rate is measurable — kill-switch routed all 10 challenge-week emails to the staff sink (chalielijalem@gmail.com); 3 replies are simulated webhook calls, not prospect responses. The 100% signal-injection rate is structural (code inspection of <span class="src">agent/llm_composer.py</span>: compose_cold_email() always injects hiring_brief + gap_brief). Reply-rate delta between full-method and baseline is a benchmark projection only (Woodpecker 2024 B2B cold email, signal-grounded vs. generic). A minimum n≈200 organic sends is required to measure a statistically meaningful reply rate at this effect size. Source: <span class="src">agent/icp_classifier.py · data/threads.json · agent/llm_composer.py</span></p>
+<p class="note"><strong>Caveat — no live A/B comparison:</strong> The baseline had zero sends; no reply rate was measured for it. The delta (7–12% vs. 2–4%) is not a direct system comparison — it is two Woodpecker 2024 benchmark bands applied independently. The structural difference is confirmed by code inspection: <span class="src">agent/llm_composer.py</span> always injects hiring_brief + gap_brief (full method) vs. template with zero injection (baseline). n≈200 organic sends per variant required for empirical measurement. Source: <span class="src">agent/icp_classifier.py · data/threads.json</span></p>
 
 <h2>5. Pilot Scope Recommendation</h2>
 <div class="box">
-<strong>Segment:</strong> Segment 1 — Recently Funded Series A/B (clearest signal, highest classifier confidence 0.84, lowest offshore-perception risk).<br>
-<strong>Volume:</strong> 50 leads/week × 4 weeks = 200 leads. SDR reviews each draft before send (~2 h/week).<br>
-<strong>Budget:</strong> $3 LLM cost/month. Kill-switch stays unset until SDR approval gate is wired.<br>
-<strong>Success criterion:</strong> ≥8 qualified discovery calls booked in 30 days (4% meeting rate — conservative below expected 6.4%). If met: expand to Segment 3 and raise volume to 100/week.
+<strong>Segment:</strong> Segment 1 — Recently Funded Series A/B (classifier confidence 0.84, lowest offshore-perception risk). &nbsp;
+<strong>Volume:</strong> 50 leads/week × 4 weeks = 200 leads; SDR reviews each draft (~2 h/week). &nbsp;
+<strong>Budget:</strong> $3/month LLM cost; kill-switch unset until SDR approval gate is wired. &nbsp;
+<strong>Success criterion:</strong> ≥8 discovery calls booked in 30 days (4% meeting rate). If met: expand to Segment 3 at 100 leads/week.
 </div>
 
 </div>
@@ -94,65 +92,65 @@
 <h2>6. Four Failure Modes τ²-Bench Does Not Capture</h2>
 <table>
   <tr>
-    <th style="width:18%">Failure</th>
-    <th style="width:22%">What it is</th>
-    <th style="width:20%">Why benchmark misses it</th>
-    <th style="width:22%">What would catch it</th>
-    <th style="width:18%">Cost to add</th>
+    <th style="width:16%">Failure</th>
+    <th style="width:23%">What it is</th>
+    <th style="width:21%">Why benchmark misses it</th>
+    <th style="width:24%">What would catch it</th>
+    <th style="width:16%">Cost to add</th>
   </tr>
   <tr>
     <td><strong>Bench over-commitment</strong></td>
     <td>Agent commits "3 Go engineers in 2 weeks" when bench_summary.json is 48–72 h stale and the stack is fully engaged</td>
-    <td>τ²-Bench retail has no bench capacity state; tasks never test capacity-constrained commitments</td>
-    <td>Probe set P-009–P-012 (already built): inject stale bench file, ask for capacity, check response against actual counts. Needs weekly freshness check.</td>
-    <td>1 engineer-day to automate bench-staleness injection; $0.20/probe run</td>
+    <td>τ²-Bench retail has no bench capacity state; no capacity-constrained tasks</td>
+    <td>P-009–P-012 (built): inject stale bench file, ask for capacity, check response vs. actual counts. Needs weekly bench freshness automation.</td>
+    <td>1 eng-day; $0.20/run</td>
   </tr>
   <tr>
     <td><strong>Offshore-perception language</strong></td>
-    <td>Segment 2 pitch uses "replace higher-cost roles" framing to a CTO who had a failed offshore engagement — triggers immediate complaint or delete</td>
-    <td>τ²-Bench retail users never have offshore-sensitivity backstory; no cultural context injected</td>
-    <td>Persona-augmented probes: inject CTO persona with "prior failed offshore engagement" flag; score whether agent avoids cost-arbitrage framing. P-013–P-015 partially cover this.</td>
-    <td>2 engineer-days for persona library; $0.50/probe run with persona injection</td>
+    <td>Segment 2 pitch uses "replace higher-cost roles" framing to a CTO with a prior failed offshore engagement — triggers complaint or delete</td>
+    <td>τ²-Bench users have no offshore-sensitivity backstory; no cultural context injected into persona</td>
+    <td>Persona-augmented probes: inject CTO with offshore-failure flag; score whether agent avoids cost-arbitrage language. P-013–P-015 partial.</td>
+    <td>2 eng-days; $0.50/run</td>
   </tr>
   <tr>
     <td><strong>ICP conflict signals (P-004)</strong></td>
-    <td>Company had layoff 90d ago AND new CTO 45d ago; agent sends email referencing both signals — sounds researched-but-confused</td>
-    <td>τ²-Bench tasks have single clean intents; no overlapping conflicting business signals in state</td>
-    <td>Multi-signal conflict probes: seed prospect with 2+ overlapping signals, verify agent picks exactly one and hedges the other. Requires HiringSignalBrief with honesty_flags set.</td>
-    <td>1 engineer-day; $0.15/probe run</td>
+    <td>Layoff 90d ago + new CTO 45d ago; agent references both signals in one email — reads as researched-but-confused, aggressive</td>
+    <td>τ²-Bench tasks have single clean user intents; no overlapping conflicting business signals in prospect state</td>
+    <td>Multi-signal conflict probes: seed two overlapping signals, verify agent picks exactly one and suppresses the secondary. Requires honesty_flags check in prompt.</td>
+    <td>1 eng-day; $0.15/run</td>
   </tr>
   <tr>
     <td><strong>Multi-thread leakage</strong></td>
-    <td>Two Tenacious SDRs contact CEO and CTO of same company in same week with different segment pitches — prospect receives contradictory framing ($108K deal risk)</td>
-    <td>τ²-Bench is single-agent single-session; no shared state across parallel agents</td>
-    <td>Parallel-thread probes: run two agent instances against same company_id in thread_store; verify second agent detects active thread and suppresses outreach. P-016–P-018 cover this.</td>
-    <td>3 engineer-days for parallel harness; $0.40/probe run</td>
+    <td>Two SDRs contact CEO and CTO of same company in the same week with different segment pitches — contradictory framing ($108K deal risk)</td>
+    <td>τ²-Bench is single-agent single-session; no shared state across parallel agent instances</td>
+    <td>Parallel-thread probes: two agent instances vs. same company_id in thread_store; verify second agent detects active thread and suppresses. P-016–P-018 cover this.</td>
+    <td>3 eng-days; $0.40/run</td>
   </tr>
 </table>
 
 <h2>7. Public-Signal Lossiness — AI Maturity Scoring</h2>
 <table>
-  <tr><th style="width:22%">Profile</th><th style="width:30%">What the system sees</th><th style="width:26%">What the agent does wrong</th><th style="width:22%">Business impact</th></tr>
+  <tr><th style="width:18%">Profile</th><th style="width:27%">What the system sees</th><th style="width:28%">What the agent does wrong</th><th style="width:27%">Business impact</th></tr>
   <tr>
-    <td><strong>Quietly sophisticated / publicly silent</strong><br><span class="note">e.g. fintech with proprietary ML stack, no public blog, careers behind login wall</span></td>
-    <td>0 AI-adjacent open roles detected, no named ML leadership on LinkedIn, no GitHub OSS activity → <span class="red">ai_maturity_score = 0</span>, weak_signal = true</td>
-    <td>Agent abstains or sends generic exploratory opener with no signal grounding. Pitch undersells Tenacious capability. Prospect (who is actually AI-mature) reads it as uninformed outreach and ignores it.</td>
-    <td>False negative: missed warm lead. At $36K ACV and 15% close rate: expected $5,400 lost per false-negative event. Estimated false-negative rate: 12–18% of AI-mature prospects in closed-career-page sectors.</td>
+    <td><strong>Quietly sophisticated / publicly silent</strong> <span class="note">(fintech, proprietary ML stack, careers behind login)</span></td>
+    <td>0 AI roles detected, no named ML leadership, no OSS → <span class="red">ai_maturity_score=0</span>, weak_signal=true</td>
+    <td>Abstains or sends generic opener. Prospect (actually AI-mature) reads it as uninformed outreach and ignores it.</td>
+    <td>False negative: missed warm lead. $5,400 expected loss/event (15% close × $36K ACV). Est. 12–18% of AI-mature firms in closed-career sectors.</td>
   </tr>
   <tr>
-    <td><strong>Loud but shallow</strong><br><span class="note">e.g. Series A startup with "AI-first" in every press release, 0 actual ML roles, no shipped ML product</span></td>
-    <td>High executive commentary score, funding event detected, 2–3 AI buzzword job titles → <span class="amber">ai_maturity_score = 2</span>, segment_confidence = 0.78</td>
-    <td>Agent sends signal-grounded email citing "ML platform gap vs. Tecton" — but prospect has no ML platform. Pitch lands as confused and off-target. CTO forwards it to team as an example of AI vendor noise.</td>
-    <td>False positive: brand damage. Cost: $500 reputation estimate per wrong-signal email × 5% false-positive rate on 1,000 emails = $25,000 expected reputation cost. Trigger for kill-switch Threshold 3 (>3 wrong-signal HubSpot flags per 7-day window).</td>
+    <td><strong>Loud but shallow</strong> <span class="note">(Series A, "AI-first" press releases, 0 shipped ML product)</span></td>
+    <td>High exec commentary + funding event + 2–3 AI buzzword titles → <span class="amber">ai_maturity_score=2</span>, confidence=0.78</td>
+    <td>Sends signal-grounded email citing "MLOps gap vs. Tecton" — but prospect has no ML platform. Pitch lands confused; CTO forwards as vendor-noise example.</td>
+    <td>False positive: brand damage. $500 rep cost × 5% rate × 1,000 emails = $25,000. Triggers kill-switch Threshold 3 (&gt;3 wrong-signal HubSpot flags/7d).</td>
   </tr>
 </table>
 
 <h2>8. One Honest Unresolved Failure — P-004</h2>
 <div class="box">
 <h3>P-004: Layoff + New CTO (Conflicting Signals) — Residual trigger rate 3/10 after fix</h3>
-<p><strong>What happens:</strong> Prospect company had a layoff 90 days ago (Segment 2 — restructuring signal) and a new CTO joined 45 days ago (Segment 3 — leadership transition signal). The classifier picks Segment 3 (leadership transition wins on recency), but the LLM email references both the layoff and the new CTO in the same sentence. The combined framing reads as "we know you laid people off and got a new boss" — aggressive and off-putting.</p>
-<p><strong>Why unresolved:</strong> The <span class="src">honesty_flags</span> field now includes <span class="src">conflicting_segment_signals</span> when both events are present. But the LLM system prompt does not yet have a hard rule suppressing the secondary signal from the email body. Fix requires a prompt constraint: "If honesty_flags includes conflicting_segment_signals, reference only the primary segment signal in the email body."</p>
-<p><strong>Business impact if deployed:</strong> Estimated 8% of Segment 2/3 prospects have overlapping signals. At 50 leads/week × 8% = 4 conflicted leads/week. Each wrong email costs $500 reputation + $18,000 expected deal loss (P(close) × ACV). <span class="red">Expected weekly impact unresolved: ~$72,500.</span> Do not expand beyond Segment 1 until P-004 is resolved.</p>
+<p><strong>What happens:</strong> Layoff 90d ago (Segment 2) + new CTO 45d ago (Segment 3). Classifier picks Segment 3 on recency, but LLM email references both events — reads as "we know you laid people off and got a new boss." Aggressive and off-putting.</p>
+<p><strong>Why unresolved:</strong> <span class="src">honesty_flags</span> now flags <span class="src">conflicting_segment_signals</span>, but the system prompt lacks a suppression rule. Fix: "If honesty_flags includes conflicting_segment_signals, reference only the primary_segment_match signal and suppress the secondary."</p>
+<p><strong>Impact if deployed:</strong> ~8% of Seg 2/3 prospects have overlapping signals → ~4 conflicted leads/week at 50/week. Cost: $500 rep + $18K expected deal loss each. <span class="red">~$72,500/week unresolved. Do not expand past Segment 1 without this fix.</span></p>
 </div>
 
 </div>
